@@ -32,19 +32,19 @@ namespace ScriptStack
 
             var r = new List<Routine>();
 
-            r.Add(new Routine(typeof(int), "db_register", typeof(string), typeof(string),"Registriert einen Provider. Params: invariant(string), factoryType(string). Return: 1 wenn ok. Beispiel factoryType: \"Npgsql.NpgsqlFactory, Npgsql\""));
+            r.Add(new Routine(typeof(int), "db.register", typeof(string), typeof(string),"Registriert einen Provider. Params: invariant(string), factoryType(string). Return: 1 wenn ok. Beispiel factoryType: \"Npgsql.NpgsqlFactory, Npgsql\""));
 
-            r.Add(new Routine(typeof(int), "db_open", typeof(string), typeof(string),"Öffnet eine DB-Connection. Params: invariant(string), connStr(string). Return: handle(int)."));
+            r.Add(new Routine(typeof(int), "db.open", typeof(string), typeof(string),"Öffnet eine DB-Connection. Params: invariant(string), connStr(string). Return: handle(int)."));
 
-            r.Add(new Routine(typeof(int), "db_close", typeof(int),"Schließt eine Connection. Param: handle(int). Return: 1 wenn ok, sonst 0."));
+            r.Add(new Routine(typeof(int), "db.close", typeof(int),"Schließt eine Connection. Param: handle(int). Return: 1 wenn ok, sonst 0."));
 
-            r.Add(new Routine(typeof(ArrayList), "db_query", typeof(int), typeof(string),"Führt SQL aus (Query oder NonQuery). Params: handle(int), sql(string). Return: ArrayList {rows, affected, last_id} (last_id meist null)."));
+            r.Add(new Routine(typeof(ArrayList), "db.query", typeof(int), typeof(string),"Führt SQL aus (Query oder NonQuery). Params: handle(int), sql(string). Return: ArrayList {rows, affected, last_id} (last_id meist null)."));
 
-            r.Add(new Routine(typeof(ArrayList), "db_query_p", typeof(int), typeof(string), typeof(ArrayList),"Führt SQL mit Parametern aus. Params: handle(int), sql(string), params(ArrayList). params = ArrayList von ArrayList: p['name'], p['value'], optional p['dbtype']. Return: ArrayList {rows, affected, last_id} (last_id meist null)."));
+            r.Add(new Routine(typeof(ArrayList), "db.query_p", typeof(int), typeof(string), typeof(ArrayList),"Führt SQL mit Parametern aus. Params: handle(int), sql(string), params(ArrayList). params = ArrayList von ArrayList: p['name'], p['value'], optional p['dbtype']. Return: ArrayList {rows, affected, last_id} (last_id meist null)."));
 
-            r.Add(new Routine((Type)null, "db_scalar", typeof(int), typeof(string),"Führt SQL aus und gibt das erste Feld der ersten Zeile zurück (oder null)."));
+            r.Add(new Routine((Type)null, "db.scalar", typeof(int), typeof(string),"Führt SQL aus und gibt das erste Feld der ersten Zeile zurück (oder null)."));
 
-            r.Add(new Routine(typeof(int), "db_exec", typeof(int), typeof(string),"Führt NonQuery aus und gibt affected rows zurück."));
+            r.Add(new Routine(typeof(int), "db.exec", typeof(int), typeof(string),"Führt NonQuery aus und gibt affected rows zurück."));
 
             exportedRoutines = r.AsReadOnly();
 
@@ -56,16 +56,16 @@ namespace ScriptStack
         {
             try
             {
-                if (fn == "db_register") return RegisterProvider((string)p[0], (string)p[1]);
+                if (fn == "db.register") return RegisterProvider((string)p[0], (string)p[1]);
 
-                if (fn == "db_open") return Open((string)p[0], (string)p[1]);
-                if (fn == "db_close") return Close((int)p[0]) ? 1 : 0;
+                if (fn == "db.open") return Open((string)p[0], (string)p[1]);
+                if (fn == "db.close") return Close((int)p[0]) ? 1 : 0;
 
-                if (fn == "db_query") return Query((int)p[0], (string)p[1], null);
-                if (fn == "db_query_p") return Query((int)p[0], (string)p[1], (ArrayList)p[2]);
+                if (fn == "db.query") return Query((int)p[0], (string)p[1], null);
+                if (fn == "db.query_p") return Query((int)p[0], (string)p[1], (ArrayList)p[2]);
 
-                if (fn == "db_scalar") return Scalar((int)p[0], (string)p[1]);
-                if (fn == "db_exec") return Exec((int)p[0], (string)p[1]);
+                if (fn == "db.scalar") return Scalar((int)p[0], (string)p[1]);
+                if (fn == "db.exec") return Exec((int)p[0], (string)p[1]);
             }
             catch (ScriptStackException) { throw; }
             catch (Exception e)
